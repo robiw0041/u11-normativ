@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Book
 from .forms import BookForm
+from django.core.paginator import Paginator
+from .models import Post
+
 
 
 # CREATE
@@ -34,3 +37,27 @@ def book_delete(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'books/book_confirm_delete.html', {'book': book})
+
+
+
+
+def post_list(request):
+    posts = Post.objects.all()
+
+    # SEARCH
+    q = request.GET.get("q")
+    if q:
+        posts = posts.filter(
+            title__icontains=q
+        ) | posts.filter(
+            content__icontains=q
+        )
+
+    # PAGINATION
+    paginator = Paginator(posts, 5)  # har sahifada 5 ta
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "posts/post_list.html", {
+        "page_obj": page_obj,
+    })

@@ -1,0 +1,56 @@
+<form method="get" class="d-flex mb-3">
+    <input
+        type="text"
+        name="q"
+        class="form-control me-2"
+        placeholder="Search..."
+        value="{{ request.GET.q }}"
+    >
+    <button class="btn btn-primary">Search</button>
+</form>
+
+
+{% for post in page_obj %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <h5>{{ post.title }}</h5>
+            <p>{{ post.content|truncatewords:20 }}</p>
+        </div>
+    </div>
+{% empty %}
+    <p>No posts found.</p>
+{% endfor %}
+
+
+<nav>
+    <ul class="pagination">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.previous_page_number }}&q={{ request.GET.q }}">
+                    ←
+                </a>
+            </li>
+        {% endif %}
+
+        {% for number in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == number %}active{% endif %}">
+                <a class="page-link"
+                   href="?page={{ number }}&q={{ request.GET.q }}">
+                    {{ number }}
+                </a>
+            </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ page_obj.next_page_number }}&q={{ request.GET.q }}">
+                    →
+                </a>
+            </li>
+        {% endif %}
+
+    </ul>
+</nav>
