@@ -5,7 +5,6 @@ from django.core.paginator import Paginator
 from .models import Post
 
 
-
 # CREATE
 def book_create(request):
     form = BookForm(request.POST or None)

@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import login
+from accounts.decorators import login_required
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 
 def register_view(request):
@@ -28,3 +31,27 @@ def login_view(request):
             return redirect("post_list")  # asosiy sahifa
 
     return render(request, "accounts/login.html", {"form": form})
+
+
+@login_required
+def post_create(request):
+    ...
+
+@login_required
+def post_update(request, pk):
+    ...
+
+@login_required
+def post_delete(request, pk):
+    ...
+
+
+def post_list(request):
+    ...
+
+def post_detail(request, pk):
+    ...
+
+def logout_view(request):
+    logout(request)
+    return redirect("accounts:login")
