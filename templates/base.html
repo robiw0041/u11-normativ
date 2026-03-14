@@ -1,6 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Blog</title>
+</head>
+<body>
+
+<h1>Mini Blog</h1>
+
 {% if request.user.is_authenticated %}
-    <a href="{% url 'accounts:logout' %}">Logout</a>
+    <a href="/logout/">Logout</a>
 {% else %}
-    <a href="{% url 'accounts:login' %}">Login</a>
-    <a href="{% url 'accounts:register' %}">Register</a>
+    <a href="/login/">Login</a>
+    <a href="/register/">Register</a>
 {% endif %}
+
+<hr>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

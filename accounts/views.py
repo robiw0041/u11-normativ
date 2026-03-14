@@ -3,7 +3,7 @@ from .forms import RegisterForm, LoginForm
 from django.contrib.auth import login
 from accounts.decorators import login_required
 from django.contrib.auth import logout
-from django.shortcuts import redirect
+from django.contrib.auth.decorators import permission_required
 
 
 def register_view(request):
@@ -55,3 +55,37 @@ def post_detail(request, pk):
 def logout_view(request):
     logout(request)
     return redirect("accounts:login")
+
+
+from django.contrib.auth.models import User, Group
+from django.shortcuts import render, redirect
+
+def register(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = User.objects.create_user(
+            username=username,
+            password=password
+        )
+
+        group = Group.objects.get(name='User')
+        user.groups.add(group)
+
+        return redirect('login')
+
+    return render(request, 'accounts/register.html')
+
+@permission_required('posts.add_post', raise_exception=True)
+def post_create(request):
+    ...
+
+
+@permission_required('posts.change_post', raise_exception=True)
+def post_update(request, id):
+    ...
+
+@permission_required('posts.delete_post', raise_exception=True)
+def post_delete(request, id):
+    ...

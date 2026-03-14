@@ -1,12 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <h1>Books</h1>
+{% if perms.books.add_book %}
 <a href="{% url 'book_create' %}">Add Book</a>
+{% endif %}
+
 
 <ul>
     {% for book in books %}
         <li>
             {{ book.title }} - {{ book.author }} - ${{ book.price }}
-            <a href="{% url 'book_update' book.id %}">Edit</a>
-            <a href="{% url 'book_delete' book.id %}">Delete</a>
+
+{% if perms.books.change_book %}
+<a href="{% url 'book_update' book.id %}">Edit</a>
+{% endif %}
+
+{% if perms.books.delete_book %}
+<a href="{% url 'book_delete' book.id %}">Delete</a>
+{% endif %}
+
         </li>
     {% endfor %}
 </ul>
+
+{% endblock %}
