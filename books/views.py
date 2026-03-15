@@ -3,9 +3,10 @@ from .models import Book
 from .forms import BookForm
 from django.core.paginator import Paginator
 from .models import Post
+from django.contrib.auth.decorators import permission_required
 
 
-# CREATE
+@permission_required('books.add_book',raise_exception=True)
 def book_create(request):
     form = BookForm(request.POST or None)
     if form.is_valid():
@@ -13,13 +14,13 @@ def book_create(request):
         return redirect('book_list')
     return render(request, 'books/book_form.html', {'form': form})
 
-# READ (List)
+@permission_required('books.view_book')
 def book_list(request):
     books = Book.objects.all()
     return render(request, 'books/book_list.html', {'books': books})
 
 
-# UPDATE
+@permission_required('books.change_book')
 def book_update(request, pk):
     book = get_object_or_404(Book, pk=pk)
     form = BookForm(request.POST or None, instance=book)
@@ -29,7 +30,7 @@ def book_update(request, pk):
     return render(request, 'books/book_form.html', {'form': form})
 
 
-# DELETE
+@permission_required('books.delete_book')
 def book_delete(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == "POST":
