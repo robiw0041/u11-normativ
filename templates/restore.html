@@ -1,0 +1,13 @@
+<h2>Restore Password</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="code" placeholder="Code">
+    <input type="password" name="password" placeholder="New password">
+    <input type="password" name="confirm" placeholder="Confirm password">
+    <button type="submit">Reset</button>
+</form>
+
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}

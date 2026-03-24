@@ -1,0 +1,11 @@
+<h2>Forgot Password</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Username">
+    <button type="submit">Send Code</button>
+</form>
+
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}
