@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import RegisterForm, LoginForm
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from accounts.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import permission_required
@@ -22,15 +22,18 @@ def register_view(request):
 
 
 def login_view(request):
-    form = LoginForm(request.POST or None)
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-    if request.method == "POST":
-        if form.is_valid():
-            user = form.cleaned_data["user"]
+        user = authenticate(request, username=username, password=password)
+
+        if user:
             login(request, user)
-            return redirect("post_list")  # asosiy sahifa
+            return redirect('book_list')
 
-    return render(request, "accounts/login.html", {"form": form})
+    form = LoginForm()
+    return render(request, 'accounts/login.html',context={'form':form})
 
 
 @login_required
@@ -53,8 +56,9 @@ def post_detail(request, pk):
     ...
 
 def logout_view(request):
+    print('salom')
     logout(request)
-    return redirect("accounts:login")
+    return redirect("login")
 
 
 from django.contrib.auth.models import User, Group

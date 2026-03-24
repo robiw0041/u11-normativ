@@ -8,7 +8,7 @@
 <h1>Mini Blog</h1>
 
 {% if request.user.is_authenticated %}
-    <a href="/logout/">Logout</a>
+    <a href="{% url 'logout' %}">Logout</a>
 {% else %}
     <a href="/login/">Login</a>
     <a href="/register/">Register</a>

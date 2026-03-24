@@ -8,10 +8,12 @@ from django.contrib.auth.decorators import permission_required
 
 @permission_required('books.add_book',raise_exception=True)
 def book_create(request):
-    form = BookForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect('book_list')
+    if request.method == 'POST':
+        form = BookForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    form = BookForm()
     return render(request, 'books/book_form.html', {'form': form})
 
 @permission_required('books.view_book')
